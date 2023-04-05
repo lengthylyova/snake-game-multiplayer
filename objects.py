@@ -16,7 +16,7 @@ class Game():
 
 
 class Head():
-	def function(self):
+	def __init__(self):
 		self.y = 0
 		self.x = 0
 		self.previous_position = [self.y, self.x]
