@@ -103,17 +103,27 @@ class Field():
 				elif [y, x] == [apple.y, apple.x]:
 					self.arr[y][x] = " $ "	
 				else:
-					self.arr[y][x] = "   "
+					self.arr[y][x] = " - "
 
 
-	def print(self):
-		for y in range(0, self.height+2):
-			for x in range(0, self.width+2):
-				if y == 0 or y == self.height+1:
-					print("---", end="")
-				elif x == 0 or x == self.width+1:
-					print(" | ", end="")
-				else:
-					print(self.arr[y-1][x-1], end="")
-			print()
-		return True
+	def to_string(self):
+		s = ''
+		subs = []
+		for y in range(self.height):
+			subs.append(''.join(self.arr[y]))
+		s = '\n'.join(subs)
+		return s
+
+	def print(self, string=None):
+		if not string:
+			for y in range(0, self.height+2):
+				for x in range(0, self.width+2):
+					if y == 0 or y == self.height+1:
+						print("---", end="")
+					elif x == 0 or x == self.width+1:
+						print(" | ", end="")
+					else:
+						print(self.arr[y-1][x-1], end="")
+				print()
+
+		print(string)
