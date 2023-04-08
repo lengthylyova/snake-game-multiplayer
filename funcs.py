@@ -7,8 +7,8 @@ from os import system
 
 #___SNAKE___
 def snake_create():
-	head = Head()
-	tail = Tail()
+	head = Snake.Head()
+	tail = Snake.Tail()
 	snake = Snake(head, tail, direction)
 	return snake
 

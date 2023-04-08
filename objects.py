@@ -13,11 +13,11 @@ class Players():
 			self.snake = snake
 
 
-	def add(self, connection_id, player):
-		self.all[connection_id] = player
+	def add(self, websocket_id, player):
+		self.all[websocket_id] = player
 	
-	def get(self, connection_id):
-		return self.all[connection_id].snake.tail.arr
+	def get(self, websocket_id):
+		return self.all[websocket_id].snake.tail.arr
 
 
 class Game():
@@ -78,13 +78,13 @@ class Snake():
 
 
 	def move_direction_change(self, key):
-		if key == keys['d'] and self.move_direction != 'LEFT':
+		if key == 'd' and self.move_direction != 'LEFT':
 			self.move_direction = 'RIGHT'
-		elif key == keys['a'] and self.move_direction != 'RIGHT':
+		elif key == 'a' and self.move_direction != 'RIGHT':
 			self.move_direction = 'LEFT'
-		elif key == keys['w'] and self.move_direction != 'DOWN':
+		elif key == 'w' and self.move_direction != 'DOWN':
 			self.move_direction = 'UP'
-		elif key == keys['s'] and self.move_direction != 'UP':
+		elif key == 's' and self.move_direction != 'UP':
 			self.move_direction = 'DOWN'
 
 
