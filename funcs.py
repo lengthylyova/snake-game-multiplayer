@@ -1,6 +1,7 @@
 from settings import field_width, field_height, direction, header, speed
-from objects import Head, Tail, Snake, Apple
+from objects import Snake, Apple
 from time import sleep
+from os import system
 
 
 
@@ -60,27 +61,29 @@ def restore(snake, apple):
 
 
 # tick = frame
-def tick(snake, apple, field, game):
-	snake.head.previous_position = [snake.head.y, snake.head.x]
-	snake_move(snake)
+def tick(field, players:dict, apple):
+	for player in players:
+		snake = players[player].snake
+		snake.head.previous_position = [snake.head.y, snake.head.x]
+		snake_move(snake)
 
 	# cheking for apple bite.
-	if was_apple_eaten(snake.head, apple):
-		apple.spawn(field_width, field_height, snake)
-		game.score += 100
-		snake.tail.add()
-		snake.tail.update(snake.head)
+	for player in players:
+		snake = players[player].snake
+		if was_apple_eaten(snake.head, apple):
+			apple.spawn(field_width, field_height, players)
+			snake.tail.add()
+			snake.tail.update(snake.head)
 
 	# printing frame
 	print(header)
-	field.paint(snake, apple)
+	field.paint(players, apple)
 	field.print()
-	print(f'Score: {game.score}')
-
-	# cheking for snake's self bite.
-	if snake.suicide():
-		game.status = False
-		game.score = 0
-		restore(snake, apple)
+	# # cheking for snake's self bite.
+	# if snake.suicide():
+	# 	game.status = False
+	# 	game.score = 0
+	# 	restore(snake, apple)
 
 	sleep(speed)
+	system('cls')
