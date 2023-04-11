@@ -112,17 +112,15 @@ class Field():
 		self.width = field_width
 		self.height = field_height
 		self.arr = []
-		self.empty = []
 
 	def build(self):
 		for y in range(self.height):
-			self.empty.append([])
+			self.arr.append([])
 			for x in range(self.width):
-				self.empty[y].append(" - ")
+				self.arr[y].append(" - ")
 		return True
 
 	def paint(self, players=None, apple=None):
-		self.arr = self.empty
 		if players != None:
 			for player in players:
 				s = players[player].snake
