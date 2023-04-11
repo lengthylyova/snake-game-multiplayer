@@ -85,6 +85,4 @@ def tick(field, players:dict, apple):
 	# 	game.status = False
 	# 	game.score = 0
 	# 	restore(snake, apple)
-
-	sleep(speed)
 	system('cls')

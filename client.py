@@ -1,4 +1,5 @@
 import time
+from os import system
 from websockets.sync.client import connect
 from pynput import keyboard
 from settings import keys
@@ -19,6 +20,7 @@ def main(websocket):
     wasd_listener.start()
     while True:
         message = websocket.recv()
+        system('cls')
         print(message)
 
 

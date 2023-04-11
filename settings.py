@@ -19,7 +19,7 @@ header = f'<Esc> - PAUSE\n<Enter> - START'
 # game speed:
 # lower value -> faster gameplay
 # must be grater than 0
-speed = 0.8
+speed = 0.05
 
 # control buttons
 keys = {}
