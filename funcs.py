@@ -28,14 +28,14 @@ def snake_move(snake):
 		snake.head.y += 1
 
 	# not letting snake get out of field
-	if snake.head.y > field_height-1:
+	if snake.head.y > field_height:
 		snake.head.y -= field_height
-	elif snake.head.y < 0:
+	elif snake.head.y < 1:
 		snake.head.y += field_height
 
-	if snake.head.x > field_width-1:
+	if snake.head.x > field_width:
 		snake.head.x -= field_width
-	elif snake.head.x < 0:
+	elif snake.head.x < 1:
 		snake.head.x += field_width
 
 	return True
@@ -54,35 +54,29 @@ def was_apple_eaten(head, apple):
 
 
 #___GAME___
-def restore(snake, apple):
-	snake.spawn(field_width, field_height)
-	apple.spawn(field_width, field_height, snake)
-	return True
+def restore(snake, players):
+	snake.spawn(field_width, field_height, players)
 
 
 # tick = frame
 def tick(field, players:dict, apple):
 	for player in players:
 		snake = players[player].snake
-		snake.head.previous_position = [snake.head.y, snake.head.x]
-		snake_move(snake)
 
-	# cheking for apple bite.
-	for player in players:
-		snake = players[player].snake
+		# checking for eaten apple.
 		if was_apple_eaten(snake.head, apple):
 			apple.spawn(field_width, field_height, players)
 			snake.tail.add()
 			snake.tail.update(snake.head)
 
-	# printing frame
-	print(header)
+		# moving snake
+		snake.head.previous_position = [snake.head.y, snake.head.x]
+		snake_move(snake)
+
+		# cheking for snake's self bite.
+		if snake.suicide():
+			restore(snake, players)
+
+	# printing frame.
 	field.build()
 	field.paint(players, apple)
-	field.print()
-	# # cheking for snake's self bite.
-	# if snake.suicide():
-	# 	game.status = False
-	# 	game.score = 0
-	# 	restore(snake, apple)
-	system('cls')

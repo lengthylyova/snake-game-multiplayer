@@ -16,20 +16,13 @@ class Players():
 	def add(self, websocket_id, player):
 		self.all[websocket_id] = player
 	
+
+	def player_delete(self, websocket_id):
+		del self.all[websocket_id]
+
+
 	def get(self, websocket_id):
 		return self.all[websocket_id].snake.tail.arr
-
-
-class Game():
-	def __init__(self):
-		self.status = False
-		self.score = 0
-
-	def start_stop(self, key):
-		if key == Key.enter:
-			self.status = True
-		elif key == Key.esc:
-			self.status = False	
 
 
 class Snake():
@@ -44,7 +37,7 @@ class Snake():
 			self.arr = []
 
 		def add(self):
-			self.arr.append([0, 0])
+			self.arr.append((0, 0))
 			return True
 
 		def pop(self):
@@ -71,9 +64,20 @@ class Snake():
 		return False
 
 
-	def spawn(self, field_width, field_height):
-		self.head.y = randint(0, field_height-1)
-		self.head.x = randint(0, field_width-1)
+	def spawn(self, field_width, field_height, players:dict):
+		not_able = []
+		for player in players:
+			s = players[player].snake
+			not_able.append((s.head.y, s.head.x))
+			for tail_part in s.tail.arr:
+				not_able.append(tail_part)
+
+		self.head.y = randint(1, field_height)
+		self.head.x = randint(1, field_width)
+		while [self.head.y, self.head.x] in not_able:
+			self.head.y = randint(1, field_height)
+			self.head.x = randint(1, field_width)
+
 		self.tail.arr = []
 
 
@@ -97,60 +101,70 @@ class Apple():
 		not_able = []
 		for player in players:
 			s = players[player].snake
-			not_able.append([s.head.y, s.head.x])
-			not_able.append([i for i in s.tail.arr])
+			not_able.append((s.head.y, s.head.x))
+			for tail_part in s.tail.arr:
+				not_able.append(tail_part)
 
-		self.y = randint(0, field_height-1)
-		self.x = randint(0, field_width-1)
+		self.y = randint(1, field_height)
+		self.x = randint(1, field_width)
 		while [self.y, self.x] in not_able:
-			self.y = randint(0, field_height-1)
-			self.x = randint(0, field_width-1)
+			self.y = randint(1, field_height)
+			self.x = randint(1, field_width)
+
 
 
 class Field():
 	def __init__(self, field_width, field_height):
 		self.width = field_width
 		self.height = field_height
-		self.arr = []
+		self.header = 'SnakeGame\n'
+		self.empty = []
+		self.full = []
+
 
 	def build(self):
-		self.arr = []
-		for y in range(self.height):
-			self.arr.append([])
-			for x in range(self.width):
-				self.arr[y].append(" - ")
+		self.empty = []
+		for y in range(self.height + 2):
+			self.empty.append([])
+			for x in range(self.width + 2):
+				if (y == 0) or (y == self.height + 1):
+					self.empty[y].append('---')
+					continue
+
+				if (x == 0) or (x == (self.width + 1)):
+					self.empty[y].append(' | ')
+					continue
+
+				self.empty[y].append(f'   ')
+
 		return True
 
+
 	def paint(self, players=None, apple=None):
+		self.full = self.empty
+		if apple != None:
+			self.full[apple.y][apple.x] = '\33[31m' + ' @ ' + '\33[0m'
+
 		if players != None:
 			for player in players:
-				s = players[player].snake
-				self.arr[s.head.y][s.head.x] = ' @ '
-				for tail_part in s.tail.arr:
-					self.arr[tail_part[0]][tail_part[1]] = ' @ '
-		
-		if apple != None:
-			self.arr[apple.y][apple.x] = ' $ '
+				snake = players[player].snake
+				self.full[snake.head.y][snake.head.x] = '\33[92m' + ' Q ' + '\33[0m'
+				for tail_part in snake.tail.arr:
+					self.full[tail_part[0]][tail_part[1]] = '\33[32m' + ' o ' + '\33[0m'
 
 
 	def to_string(self):
-		s = ''
+		s = self.header
 		subs = []
-		for y in range(self.height):
-			subs.append(''.join(self.arr[y]))
+		for y in range(len(self.full)):
+			subs.append(''.join(self.full[y]))
 		s = '\n'.join(subs)
 		return s
 
-	def print(self, string=None):
-		if not string:
-			for y in range(0, self.height+2):
-				for x in range(0, self.width+2):
-					if y == 0 or y == self.height+1:
-						print("---", end="")
-					elif x == 0 or x == self.width+1:
-						print(" | ", end="")
-					else:
-						print(self.arr[y-1][x-1], end="")
-				print()
 
-		print(string)
+	def print(self, string=None):
+		arr = self.full
+		for i in range(len(arr)):
+			for j in range(len(arr[0])):
+				print(arr[i][j], end='')
+			print()

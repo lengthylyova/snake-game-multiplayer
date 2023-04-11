@@ -5,6 +5,7 @@ from pynput import keyboard
 from settings import keys
 from threading import Thread
 
+
 def on_press(key, websocket):
     if key == keys['w']:
         websocket.send('w')
@@ -19,9 +20,9 @@ def main(websocket):
     wasd_listener = keyboard.Listener(on_press=lambda key: on_press(key, websocket))
     wasd_listener.start()
     while True:
-        message = websocket.recv()
+        field_string = websocket.recv()
         system('cls')
-        print(message)
+        print(field_string)
 
 
 if __name__ == '__main__':
