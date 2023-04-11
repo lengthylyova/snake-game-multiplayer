@@ -26,12 +26,12 @@ def game_session():
         tick(field, p.all, apple)
 
 
-# game_session_thread = Thread(target=game_session)
-# game_session_thread.start
 
 async def main():
+    gmFRED = asyncio.to_thread(game_session)
     async with serve(echo, "127.0.0.1", 80):
-        await asyncio.Future()  # run forever
+        await gmFRED
+
 
 
 asyncio.run(main())

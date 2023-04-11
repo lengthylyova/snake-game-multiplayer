@@ -77,6 +77,7 @@ def tick(field, players:dict, apple):
 
 	# printing frame
 	print(header)
+	field.build()
 	field.paint(players, apple)
 	field.print()
 	# # cheking for snake's self bite.

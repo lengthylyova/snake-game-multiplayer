@@ -114,6 +114,7 @@ class Field():
 		self.arr = []
 
 	def build(self):
+		self.arr = []
 		for y in range(self.height):
 			self.arr.append([])
 			for x in range(self.width):
@@ -124,7 +125,7 @@ class Field():
 		if players != None:
 			for player in players:
 				s = players[player].snake
-				self.arr[s.head.y, s.head.x] = ' @ '
+				self.arr[s.head.y][s.head.x] = ' @ '
 				for tail_part in s.tail.arr:
 					self.arr[tail_part[0]][tail_part[1]] = ' @ '
 		
