@@ -3,7 +3,7 @@ from threading import Thread
 import websockets
 from time import sleep
 from websockets.server import serve
-from objects import Players, Field, Apple
+from objects import Players, Field, Apples
 from settings import field_width as w, field_height as h, speed
 from funcs import tick, snake_create
 from config import host, port
@@ -28,7 +28,12 @@ async def handler(websocket):
 
 def game_session():
     while True:
-        tick(field, p.all, apple)
+        if len(p.all) < 2:
+            websockets.broadcast(connected, 'Waiting for more players.')
+            sleep(1)
+            continue
+
+        tick(field, p.all, apples)
         websockets.broadcast(connected, field.to_string())
         sleep(speed)
 
@@ -40,7 +45,7 @@ async def main():
 
 
 def server_init():
-    global field, apple, p, connected
+    global field, apples, p, connected
 
     field = Field(w,h)
     field.build()
@@ -50,8 +55,8 @@ def server_init():
     connected = set()
     print(f'>>> Players list created.')
 
-    apple = Apple()
-    apple.spawn(w,h,p.all)
+    apples = Apples()
+    apples.spawn(w,h,p.all)
     print(f'>>> First apple spawned.')
 
     print(f'>>> Starting server on {host}:{port}\n')

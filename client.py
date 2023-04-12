@@ -1,5 +1,6 @@
 import time
 from os import system
+import websockets
 from websockets.sync.client import connect
 from pynput import keyboard
 from settings import keys
@@ -20,9 +21,14 @@ def main(websocket):
     wasd_listener = keyboard.Listener(on_press=lambda key: on_press(key, websocket))
     wasd_listener.start()
     while True:
-        field_string = websocket.recv()
-        system('cls')
-        print(field_string)
+        try:
+            field_string = websocket.recv()
+            system('cls')
+            print(field_string)
+        except websockets.ConnectionClosedError:
+            print('Oops, connection lost...')
+            time.sleep(2)
+            exit()
 
 
 if __name__ == '__main__':

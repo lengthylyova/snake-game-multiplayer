@@ -51,9 +51,9 @@ class Snake():
 
 
 	class Head():
-		def __init__(self):
-			self.y = 0
-			self.x = 0
+		def __init__(self, field_width, field_height):
+			self.y = randint(1, field_height)
+			self.x = randint(1, field_width)
 			self.previous_position = [self.y, self.x]
 
 
@@ -92,10 +92,9 @@ class Snake():
 			self.move_direction = 'DOWN'
 
 
-class Apple():
+class Apples():
 	def __init__(self):
-		self.y = 0
-		self.x = 0
+		self.arr = []
 
 	def spawn(self, field_width, field_height, players:dict):
 		not_able = []
@@ -105,11 +104,13 @@ class Apple():
 			for tail_part in s.tail.arr:
 				not_able.append(tail_part)
 
-		self.y = randint(1, field_height)
-		self.x = randint(1, field_width)
-		while [self.y, self.x] in not_able:
-			self.y = randint(1, field_height)
-			self.x = randint(1, field_width)
+		for i in range(3-len(self.arr)):
+			y = randint(1, field_height)
+			x = randint(1, field_width)
+			while [y, x] in not_able:
+				y = randint(1, field_height)
+				x = randint(1, field_width)
+			self.arr.append((y, x))
 
 
 
@@ -130,20 +131,17 @@ class Field():
 				if (y == 0) or (y == self.height + 1):
 					self.empty[y].append('---')
 					continue
-
 				if (x == 0) or (x == (self.width + 1)):
 					self.empty[y].append(' | ')
 					continue
-
 				self.empty[y].append(f'   ')
 
-		return True
 
-
-	def paint(self, players=None, apple=None):
+	def paint(self, players=None, apples=None):
 		self.full = self.empty
-		if apple != None:
-			self.full[apple.y][apple.x] = '\33[31m' + ' @ ' + '\33[0m'
+		if apples != None:
+			for apple in apples:
+				self.full[apple[0]][apple[1]] = '\33[31m' + ' @ ' + '\33[0m'
 
 		if players != None:
 			for player in players:
