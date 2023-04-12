@@ -1,8 +1,8 @@
 from pynput.keyboard import KeyCode
 
 # playground field size
-field_width = 30
-field_height = 20
+field_width = 10
+field_height = 10
 
 # Status for pauses or game stops.
 game_status = 'OFF'
@@ -19,7 +19,7 @@ header = f'<Esc> - PAUSE\n<Enter> - START'
 # game speed:
 # lower value -> faster gameplay
 # must be grater than 0
-speed = 0.1
+speed = 0.05
 
 # control buttons
 keys = {}

@@ -1,5 +1,4 @@
 import asyncio
-from threading import Thread
 import websockets
 from time import sleep
 from websockets.server import serve
@@ -28,13 +27,13 @@ async def handler(websocket):
 
 def game_session():
     while True:
-        if len(p.all) < 2:
-            websockets.broadcast(connected, 'Waiting for more players.')
-            sleep(1)
-            continue
+        # if p.total < 2:
+        #     websockets.broadcast(connected, 'Waiting for more players.')
+        #     sleep(1)
+        #     continue
 
-        tick(field, p.all, apples)
-        websockets.broadcast(connected, field.to_string())
+        json_data = tick(field, p.all, apples)
+        websockets.broadcast(connected, json_data)
         sleep(speed)
 
 

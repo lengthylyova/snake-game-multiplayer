@@ -1,28 +1,26 @@
-from pynput.keyboard import Key
 from random import randint
-from settings import keys
 
 
 class Players():
 	def __init__(self):
 		self.all = {}
-
+		self.total = 0
 
 	class Player:
 		def __init__(self, snake):
 			self.snake = snake
 
-
 	def add(self, websocket_id, player):
 		self.all[websocket_id] = player
+		self.total += 1
 	
-
 	def player_delete(self, websocket_id):
 		del self.all[websocket_id]
-
+		self.total -= 1
 
 	def get(self, websocket_id):
 		return self.all[websocket_id].snake.tail.arr
+
 
 
 class Snake():
@@ -57,9 +55,17 @@ class Snake():
 			self.previous_position = [self.y, self.x]
 
 
-	def suicide(self):
+	def suicide(self,  players):
 		head = self.head
-		if [head.y, head.x] in self.tail.arr:
+
+		not_able = []
+		for player in players:
+			s = players[player].snake
+			not_able.append((s.head.y, s.head.x))
+			for tail_part in s.tail.arr:
+				not_able.append(tail_part)
+				
+		if [head.y, head.x] in not_able:
 			return True
 		return False
 
@@ -92,6 +98,7 @@ class Snake():
 			self.move_direction = 'DOWN'
 
 
+
 class Apples():
 	def __init__(self):
 		self.arr = []
@@ -118,7 +125,7 @@ class Field():
 	def __init__(self, field_width, field_height):
 		self.width = field_width
 		self.height = field_height
-		self.header = 'SnakeGame\n'
+		self.header = 'SnakeGame'
 		self.empty = []
 		self.full = []
 
@@ -129,10 +136,10 @@ class Field():
 			self.empty.append([])
 			for x in range(self.width + 2):
 				if (y == 0) or (y == self.height + 1):
-					self.empty[y].append('\33[34m' + '--' + '\33[0m')
+					self.empty[y].append('--')
 					continue
 				if (x == 0) or (x == (self.width + 1)):
-					self.empty[y].append('\33[34m' + ' |' + '\33[0m')
+					self.empty[y].append(' | ')
 					continue
 				self.empty[y].append(f'  ')
 
@@ -152,12 +159,10 @@ class Field():
 
 
 	def to_string(self):
-		s = self.header
 		subs = []
 		for y in range(len(self.full)):
 			subs.append(''.join(self.full[y]))
-		s = '\n'.join(subs)
-		return s
+		return '\n'.join(subs)
 
 
 	def print(self, string=None):

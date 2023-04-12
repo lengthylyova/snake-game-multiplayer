@@ -1,7 +1,6 @@
-from settings import field_width, field_height, direction, header, speed
+from settings import field_width, field_height, direction
 from objects import Snake, Apples
-from time import sleep
-from os import system
+import json
 
 
 
@@ -78,7 +77,7 @@ def tick(field, players:dict, apples):
 		snake_move(snake)
 
 		# cheking for snake's self bite.
-		if snake.suicide():
+		if snake.suicide(players):
 			restore(snake, players)
 
 
@@ -86,3 +85,8 @@ def tick(field, players:dict, apples):
 	# printing frame.
 	field.build()
 	field.paint(players, apples.arr)
+	field = field.to_string()
+	players_total = len(players)
+	data = {"players_total":players_total, "field":field}
+	json_data = json.dumps(data)
+	return json_data

@@ -4,7 +4,7 @@ import websockets
 from websockets.sync.client import connect
 from pynput import keyboard
 from settings import keys
-from threading import Thread
+import json
 
 
 def on_press(key, websocket):
@@ -22,15 +22,22 @@ def main(websocket):
     wasd_listener.start()
     while True:
         try:
-            field_string = websocket.recv()
-            system('cls')
-            print(field_string)
+            data = websocket.recv()
+            try:
+                json_data = json.loads(data)
+                system('cls')
+                print(json_data['field'])
+                print(f'Players on server: {json_data["players_total"]}')
+            except:
+                system('cls')
+                print(data)
         except websockets.ConnectionClosedError:
-            print('Oops, connection lost...')
+            print('>>> Oops, connection lost...')
             time.sleep(2)
             exit()
 
 
 if __name__ == '__main__':
+    input('>>> Press enter to connect\t')
     with connect('ws://127.0.0.1:80') as websocket:
         main(websocket)
