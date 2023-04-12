@@ -10,6 +10,15 @@ game_status = 'OFF'
 # snakes start direction
 direction = 'DOWN'
 
+# available colors
+colors = {
+	"green_fill" : ['\33[42m', '\33[0m'],
+	"red_fill" : ['\33[41m', '\33[0m'],
+	"purple_fill" : ['\33[45m', '\33[0m'],
+	"white_fill" : ['\33[47m', '\33[0m'],
+	"yellow_fill" : ['\33[43m', '\33[0m'],
+}
+
 # possible start game answers
 answers = ['Y','y','N','n']
 

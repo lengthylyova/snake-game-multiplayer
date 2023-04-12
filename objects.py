@@ -1,8 +1,9 @@
 from random import randint
+from settings import colors
 
 
 class Players():
-	def __init__(self):
+	def __init__(self, color=None):
 		self.all = {}
 		self.total = 0
 
@@ -24,10 +25,11 @@ class Players():
 
 
 class Snake():
-	def __init__(self, head, tail, direction):
+	def __init__(self, head, tail, direction, color=None):
 		self.head = head
 		self.tail = tail
 		self.move_direction = direction
+		self.color = color
 
 
 	class Tail():
@@ -153,9 +155,9 @@ class Field():
 		if players != None:
 			for player in players:
 				snake = players[player].snake
-				self.full[snake.head.y][snake.head.x] = '\33[42m' + '  ' + '\33[0m'
+				self.full[snake.head.y][snake.head.x] = snake.color.start + '  ' + snake.color.end
 				for tail_part in snake.tail.arr:
-					self.full[tail_part[0]][tail_part[1]] = '\33[42m' + '  ' + '\33[0m'
+					self.full[tail_part[0]][tail_part[1]] = snake.color.start + '  ' + snake.color.end
 
 
 	def to_string(self):
@@ -171,3 +173,9 @@ class Field():
 			for j in range(len(arr[0])):
 				print(arr[i][j], end='')
 			print()
+
+
+class Color():
+	def __init__(self, color_name:str):
+		self.start = colors[color_name][0]
+		self.end = colors[color_name][1]

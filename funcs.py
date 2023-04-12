@@ -1,6 +1,7 @@
-from settings import field_width, field_height, direction
-from objects import Snake, Apples
+from settings import field_width, field_height, direction, colors
+from objects import Snake, Apples, Color
 import json
+from random import choice
 
 
 
@@ -8,7 +9,8 @@ import json
 def snake_create():
 	head = Snake.Head(field_width, field_height)
 	tail = Snake.Tail()
-	snake = Snake(head, tail, direction)
+	color = Color(get_random_color())
+	snake = Snake(head, tail, direction, color)
 	return snake
 
 
@@ -38,6 +40,12 @@ def snake_move(snake):
 		snake.head.x += field_width
 
 	return True
+
+
+#__COLORS__
+def get_random_color():
+	color_name = choice(list(colors.keys()))
+	return color_name
 
 
 #___APPLE___

@@ -2,9 +2,9 @@ import asyncio
 import websockets
 from time import sleep
 from websockets.server import serve
-from objects import Players, Field, Apples
+from objects import Players, Field, Apples, Color
 from settings import field_width as w, field_height as h, speed
-from funcs import tick, snake_create
+from funcs import tick, snake_create, get_random_color
 from config import host, port
 
 
