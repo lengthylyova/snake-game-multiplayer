@@ -129,26 +129,26 @@ class Field():
 			self.empty.append([])
 			for x in range(self.width + 2):
 				if (y == 0) or (y == self.height + 1):
-					self.empty[y].append('---')
+					self.empty[y].append('\33[34m' + '--' + '\33[0m')
 					continue
 				if (x == 0) or (x == (self.width + 1)):
-					self.empty[y].append(' | ')
+					self.empty[y].append('\33[34m' + ' |' + '\33[0m')
 					continue
-				self.empty[y].append(f'   ')
+				self.empty[y].append(f'  ')
 
 
 	def paint(self, players=None, apples=None):
 		self.full = self.empty
 		if apples != None:
 			for apple in apples:
-				self.full[apple[0]][apple[1]] = '\33[31m' + ' @ ' + '\33[0m'
+				self.full[apple[0]][apple[1]] = '\33[41m' + '  ' + '\33[0m'
 
 		if players != None:
 			for player in players:
 				snake = players[player].snake
-				self.full[snake.head.y][snake.head.x] = '\33[92m' + ' Q ' + '\33[0m'
+				self.full[snake.head.y][snake.head.x] = '\33[42m' + '  ' + '\33[0m'
 				for tail_part in snake.tail.arr:
-					self.full[tail_part[0]][tail_part[1]] = '\33[32m' + ' o ' + '\33[0m'
+					self.full[tail_part[0]][tail_part[1]] = '\33[42m' + '  ' + '\33[0m'
 
 
 	def to_string(self):
