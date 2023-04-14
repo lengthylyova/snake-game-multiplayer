@@ -1,1 +1,2 @@
 pynput==1.7.6
+websockets==11.0.1

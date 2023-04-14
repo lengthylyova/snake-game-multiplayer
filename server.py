@@ -2,9 +2,9 @@ import asyncio
 import websockets
 from time import sleep
 from websockets.server import serve
-from objects import Players, Field, Apples, Color
+from objects import Players, Field, Apples
 from settings import field_width as w, field_height as h, speed
-from funcs import tick, snake_create, get_random_color
+from funcs import tick, snake_create
 from config import host, port
 
 
@@ -27,10 +27,10 @@ async def handler(websocket):
 
 def game_session():
     while True:
-        # if p.total < 2:
-        #     websockets.broadcast(connected, 'Waiting for more players.')
-        #     sleep(1)
-        #     continue
+        if p.total < 2:
+            websockets.broadcast(connected, 'Waiting for more players.')
+            sleep(1)
+            continue
 
         json_data = tick(field, p.all, apples)
         websockets.broadcast(connected, json_data)

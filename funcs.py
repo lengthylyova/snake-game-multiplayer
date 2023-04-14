@@ -90,11 +90,12 @@ def tick(field, players:dict, apples):
 
 
 	apples.spawn(field_width, field_height, players)
-	# printing frame.
 	field.build()
 	field.paint(players, apples.arr)
+
 	field = field.to_string()
 	players_total = len(players)
 	data = {"players_total":players_total, "field":field}
 	json_data = json.dumps(data)
+	
 	return json_data
