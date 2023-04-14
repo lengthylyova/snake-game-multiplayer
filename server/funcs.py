@@ -72,11 +72,16 @@ def restore(snake, players):
 
 # tick = frame
 def tick(field, players:dict, apples):
+	
+	score_list = []
+	players_total = len(players)
+
 	for player in players:
 		snake = players[player].snake
 
 		# checking for eaten apple.
 		if was_apple_eaten(snake.head, apples.arr):
+			players[player].score += 100
 			snake.tail.add()
 			snake.tail.update(snake.head)
 
@@ -86,7 +91,10 @@ def tick(field, players:dict, apples):
 
 		# cheking for snake's self bite.
 		if snake.suicide(players):
+			players[player].score = 0
 			restore(snake, players)
+		
+		score_list.append(f'{player}: {players[player].score}.')
 
 
 	apples.spawn(field_width, field_height, players)
@@ -94,8 +102,8 @@ def tick(field, players:dict, apples):
 	field.paint(players, apples.arr)
 
 	field = field.to_string()
-	players_total = len(players)
-	data = {"players_total":players_total, "field":field}
+
+	data = {"players_total":players_total, "field":field, "scores":score_list}
 	json_data = json.dumps(data)
 	
 	return json_data

@@ -10,6 +10,7 @@ class Players():
 	class Player:
 		def __init__(self, snake):
 			self.snake = snake
+			self.score = 0
 
 	def add(self, websocket_id, player):
 		self.all[websocket_id] = player
