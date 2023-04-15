@@ -8,17 +8,18 @@ import json
 
 
 def on_press(key, websocket):
-    if key == keys['w']:
-        websocket.send('w')
-    elif key == keys['a']:
-        websocket.send('a')
-    elif key == keys['s']:
-        websocket.send('s')
-    elif key == keys['d']:
-        websocket.send('d')
+    if key == keys['UP']:
+        websocket.send('UP')
+    elif key == keys['LEFT']:
+        websocket.send('LEFT')
+    elif key == keys['DOWN']:
+        websocket.send('DOWN')
+    elif key == keys['RIGHT']:
+        websocket.send('RIGHT')
 
 
-def main(websocket):
+def main(websocket, nickname):
+    websocket.send(nickname)
     wasd_listener = keyboard.Listener(on_press=lambda key: on_press(key, websocket))
     wasd_listener.start()
     while True:
@@ -42,6 +43,9 @@ def main(websocket):
 
 
 if __name__ == '__main__':
-    input('>>> Press enter to connect\t')
+    nickname = ''
+    while nickname == '':
+        nickname = input('>>> Enter your nickname\t')
+
     with connect(f'ws://{host}:{port}') as websocket:
-        main(websocket)
+        main(websocket, nickname)

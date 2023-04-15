@@ -1,9 +1,6 @@
 # playground field size
-field_width = 30
-field_height = 20
-
-# Status for pauses or game stops.
-game_status = 'OFF'
+field_width = 40
+field_height = 30
 
 # snakes start direction
 direction = 'DOWN'
@@ -17,13 +14,7 @@ colors = {
 	"yellow_fill" : ['\33[43m', '\33[0m'],
 }
 
-# possible start game answers
-answers = ['Y','y','N','n']
-
-# playscreen header
-header = f'<Esc> - PAUSE\n<Enter> - START'
-
 # game speed:
 # lower value -> faster gameplay
 # must be grater than 0
-speed = 0.05
+speed = 0.1

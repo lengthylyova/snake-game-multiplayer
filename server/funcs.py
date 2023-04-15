@@ -77,11 +77,12 @@ def tick(field, players:dict, apples):
 	players_total = len(players)
 
 	for player in players:
-		snake = players[player].snake
+		player = players[player]
+		snake = player.snake
 
 		# checking for eaten apple.
 		if was_apple_eaten(snake.head, apples.arr):
-			players[player].score += 100
+			player.score += 100
 			snake.tail.add()
 			snake.tail.update(snake.head)
 
@@ -91,10 +92,10 @@ def tick(field, players:dict, apples):
 
 		# cheking for snake's self bite.
 		if snake.suicide(players):
-			players[player].score = 0
+			player.score = 0
 			restore(snake, players)
 		
-		score_list.append(f'{player}: {players[player].score}.')
+		score_list.append(f'{player.nickname}: {player.score}')
 
 
 	apples.spawn(field_width, field_height, players)

@@ -1,5 +1,5 @@
 from random import randint
-from settings import colors
+from settings import colors, field_width, field_height
 
 
 class Players():
@@ -8,12 +8,13 @@ class Players():
 		self.total = 0
 
 	class Player:
-		def __init__(self, snake):
+		def __init__(self, snake, nickname):
 			self.snake = snake
+			self.nickname = nickname
 			self.score = 0
 
-	def add(self, websocket_id, player):
-		self.all[websocket_id] = player
+	def add(self, player):
+		self.all[player.nickname] = player
 		self.total += 1
 	
 	def player_delete(self, websocket_id):
@@ -64,7 +65,14 @@ class Snake():
 		not_able = []
 		for player in players:
 			s = players[player].snake
-			not_able.append((s.head.y, s.head.x))
+
+			condition1 = (head.y, head.x) == (s.head.y, s.head.x)
+			condition2 = head.previous_position != s.head.previous_position
+
+			if condition1 and condition2:
+				s.spawn(field_width, field_height, players)
+				return True
+			
 			for tail_part in s.tail.arr:
 				not_able.append(tail_part)
 				
@@ -91,13 +99,13 @@ class Snake():
 
 
 	def move_direction_change(self, key):
-		if key == 'd' and self.move_direction != 'LEFT':
+		if key == 'RIGHT' and self.move_direction != 'LEFT':
 			self.move_direction = 'RIGHT'
-		elif key == 'a' and self.move_direction != 'RIGHT':
+		elif key == 'LEFT' and self.move_direction != 'RIGHT':
 			self.move_direction = 'LEFT'
-		elif key == 'w' and self.move_direction != 'DOWN':
+		elif key == 'UP' and self.move_direction != 'DOWN':
 			self.move_direction = 'UP'
-		elif key == 's' and self.move_direction != 'UP':
+		elif key == 'DOWN' and self.move_direction != 'UP':
 			self.move_direction = 'DOWN'
 
 

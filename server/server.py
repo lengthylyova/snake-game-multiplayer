@@ -9,18 +9,19 @@ from config import host, port
 
 
 async def handler(websocket):
-    player = Players.Player(snake_create())
+    player_nickname = await websocket.recv()
+    player = Players.Player(snake_create(), player_nickname)
     websocket_id = websocket.id.hex
-    p.add(websocket_id=websocket_id, player=player)
+    p.add(player=player)
     connected.add(websocket)
-    print(f'>>> Connected with hex_id:{websocket_id}')
+    print(f'>>> {player_nickname}({websocket_id}) connected.')
     try:
         async for message in websocket:
-            player_snake = p.all[websocket_id].snake
+            player_snake = p.all[player_nickname].snake
             player_snake.move_direction_change(message)
     except websockets.ConnectionClosedError:
-        print(f'>>> Disconnected with hex_id:{websocket_id}')
-        del p.all[websocket_id]
+        print(f'>>> {player_nickname}({websocket_id}) disconnected.')
+        del p.all[player_nickname]
     finally:
         connected.remove(websocket)
 
